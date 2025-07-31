@@ -15,7 +15,6 @@ import {
   MessageCircle,
   CheckCircle,
   ExternalLink,
-  Network,
   Bot,
   FileCheck,
   Layers,
@@ -49,9 +48,9 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden" style={{ userSelect: 'text' }}>
       {/* Background Network Pattern */}
-      <div className="fixed inset-0 opacity-10">
+      <div className="fixed inset-0 opacity-10" style={{ pointerEvents: 'none' }}>
         <div className="absolute top-20 left-10">
           <div className="flex items-center space-x-8">
             <NodeDot />
@@ -79,7 +78,7 @@ function App() {
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 px-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-indigo-600/10 to-cyan-500/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-indigo-600/10 to-cyan-500/20" style={{ pointerEvents: 'none' }} />
         
         <div className="relative max-w-6xl mx-auto text-center">
           <div className="mb-8 flex justify-center">
@@ -104,7 +103,9 @@ function App() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-lg hover:from-blue-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25">
+            <button 
+              onClick={() => document.getElementById('whitelist-form')?.scrollIntoView({behavior: 'smooth'})}
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-lg hover:from-blue-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25">
               Join the Whitelist
             </button>
             <a href="#security" className="flex items-center text-cyan-400 hover:text-cyan-300 transition-colors">
@@ -176,7 +177,9 @@ function App() {
           </div>
           
           <div className="text-center mt-12">
-            <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold hover:from-blue-500 hover:to-cyan-400 transition-all duration-300">
+            <button 
+              onClick={() => document.getElementById('whitelist-form')?.scrollIntoView({behavior: 'smooth'})}
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold hover:from-blue-500 hover:to-cyan-400 transition-all duration-300">
               Join the Whitelist
             </button>
           </div>
@@ -423,7 +426,7 @@ function App() {
       </section>
 
       {/* Whitelist Form */}
-      <section className="py-24 px-6 bg-gradient-to-b from-gray-800 to-gray-900">
+      <section id="whitelist-form" className="py-24 px-6 bg-gradient-to-b from-gray-800 to-gray-900">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-black text-center mb-8">
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
@@ -436,7 +439,7 @@ function App() {
           </p>
           
           {!isSubmitted ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" style={{ pointerEvents: 'auto' }}>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   <Mail className="w-4 h-4 inline mr-2" />
