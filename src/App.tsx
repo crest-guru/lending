@@ -83,8 +83,8 @@ function App() {
         
         <div className="relative max-w-6xl mx-auto text-center">
           <div className="mb-8 flex justify-center">
-            <div className="p-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500">
-              <img src="/AII.png" alt="AII Logo" className="w-12 h-12" />
+            <div className="rounded-full">
+              <img src="/AII.png" alt="AII Logo" className="w-[72px] h-[72px]" />
             </div>
           </div>
           
@@ -564,8 +564,8 @@ function App() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
-              <div className="p-3 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500">
-                <img src="/AII.png" alt="AII Logo" className="w-8 h-8" />
+              <div className="rounded-full">
+                <img src="/AII.png" alt="AII Logo" className="w-12 h-12" />
               </div>
             </div>
             <p className="text-sm text-gray-500 mb-6 max-w-3xl mx-auto">
