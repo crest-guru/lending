@@ -18,7 +18,10 @@ import {
   Bot,
   FileCheck,
   Layers,
+  Loader,
+  AlertCircle,
 } from 'lucide-react';
+import { sendToNotion } from './api';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -31,11 +34,24 @@ function App() {
     privacyAgreed: false
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.betaAgreed && formData.privacyAgreed && formData.email) {
-      setIsSubmitted(true);
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        await sendToNotion(formData);
+        setIsSubmitted(true);
+      } catch (err) {
+        setError('Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -545,11 +561,26 @@ function App() {
                 </div>
               </div>
               
+              {error && (
+                <div className="p-4 rounded-lg bg-red-900/30 border border-red-800 text-red-200 flex items-center space-x-2">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )}
+              
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-lg hover:from-blue-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25"
+                disabled={isLoading}
+                className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-lg hover:from-blue-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Apply to Whitelist
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <Loader className="w-5 h-5 mr-2 animate-spin" />
+                    Отправка...
+                  </span>
+                ) : (
+                  'Apply to Whitelist'
+                )}
               </button>
             </form>
           ) : (
