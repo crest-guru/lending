@@ -47,7 +47,7 @@ function App() {
         await sendToNotion(formData);
         setIsSubmitted(true);
       } catch (err) {
-        setError('Произошла ошибка при отправке данных. Пожалуйста, попробуйте еще раз.');
+        setError('ERROR: Failed to submit form');
         console.error(err);
       } finally {
         setIsLoading(false);
