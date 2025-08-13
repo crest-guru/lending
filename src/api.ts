@@ -20,12 +20,12 @@ export async function sendToNotion(formData: {
     const data = await response.json();
     
     if (!response.ok) {
-      throw new Error(data.error || 'Ошибка при отправке данных');
+      throw new Error(data.error || 'Error sending data to Notion');
     }
     
     return data;
   } catch (error) {
-    console.error('Ошибка при отправке данных в Notion:', error);
+    console.error('Error sending data to Notion:', error);
     throw error;
   }
 } 

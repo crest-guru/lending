@@ -23,19 +23,16 @@ export async function onRequest(context) {
   try {
     const {
       email,
-      isTreasurer,
-      organization,
-      assets,
-      handle,
-      betaAgreed,
-      privacyAgreed,
+      checkbox,
+      organisation,
+      treasure,
+      tg,
       comment: commentInput,
     } = await request.json();
 
     if (!email) return json({ error: 'Email is required' }, 400, CORS);
 
-    const baseComment = `Treasurer: ${isTreasurer ? 'Yes' : 'No'}, Assets: ${assets || 'Not specified'}`;
-    const comment = commentInput ? `${baseComment}; ${commentInput}` : baseComment;
+    const comment = commentInput || '';
     if (comment.length > 150) {
       return json({ error: 'Comment too long (max 150 characters)' }, 400, CORS);
     }
@@ -59,6 +56,11 @@ export async function onRequest(context) {
         parent: { database_id: '19727ba82ccc8017b4d8f2825a4d4895' },
         properties: {
           Email: { title: [{ text: { content: email } }] },
+          Checkbox: { checkbox: !!checkbox },
+          Organisation: { rich_text: [{ text: { content: organisation || '' } }] },
+          treasure: { checkbox: !!treasure },
+          tg: { rich_text: [{ text: { content: tg || '' } }] },
+          Comment: { rich_text: [{ text: { content: comment } }] },
           Timestamp: { date: { start: timestamp } },
           IP: { rich_text: [{ text: { content: ip } }] },
           UserAgent: { rich_text: [{ text: { content: userAgent } }] },
@@ -66,11 +68,6 @@ export async function onRequest(context) {
           Referer: { rich_text: [{ text: { content: referer } }] },
           Timezone: { rich_text: [{ text: { content: timezone } }] },
           Language: { rich_text: [{ text: { content: language } }] },
-          Comment: { rich_text: [{ text: { content: comment || '' } }] },
-          Organization: { rich_text: [{ text: { content: organization || '' } }] },
-          Handle: { rich_text: [{ text: { content: handle || '' } }] },
-          BetaAgreed: { checkbox: !!betaAgreed },
-          PrivacyAgreed: { checkbox: !!privacyAgreed },
         },
       }),
     });
@@ -84,4 +81,4 @@ export async function onRequest(context) {
   } catch {
     return json({ error: 'Server error' }, 500, CORS);
   }
-} 
+}
