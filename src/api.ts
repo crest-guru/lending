@@ -1,4 +1,4 @@
-// Функция для отправки данных в Notion
+// Client helper to submit form to API (supports external base via VITE_API_BASE)
 export async function sendToNotion(formData: {
   email: string;
   isTreasurer: boolean;
@@ -8,24 +8,50 @@ export async function sendToNotion(formData: {
   betaAgreed: boolean;
   privacyAgreed: boolean;
 }) {
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE || '';
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
   try {
-    const response = await fetch('/api/submit-form', {
+    const payload = {
+      // API-expected keys
+      email: formData.email,
+      checkbox: formData.privacyAgreed,
+      organisation: formData.organization,
+      treasure: formData.isTreasurer,
+      tg: formData.handle,
+      comment: '',
+      // Also send original keys for compatibility
+      ...formData,
+    };
+
+    const response = await fetch(`${API_BASE}/api/submit-form`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
+      signal: controller.signal,
     });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.error || 'Error sending data to Notion');
+
+    const text = await response.text();
+    let data: any = {};
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch {
+      // Response was not JSON (e.g., proxied HTML); fall through with error below
     }
-    
+
+    if (!response.ok) {
+      throw new Error(data?.error || `Request failed with status ${response.status}`);
+    }
+
     return data;
   } catch (error) {
-    console.error('Error sending data to Notion:', error);
+    console.error('Error sending data to Notion:', error); // English only inside code
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
-} 
+}
