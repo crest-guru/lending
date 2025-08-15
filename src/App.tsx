@@ -44,7 +44,17 @@ function App() {
       setError(null);
       
       try {
-        await sendToNotion(formData);
+        // Собираем все данные из формы и отправляем в Notion
+        const submissionData = {
+          email: formData.email,
+          treasuary: formData.isTreasurer ? 'I manage a treasury / DAO / family office / fund' : '',
+          organisation: formData.organization,
+          assets: formData.assets,
+          tg: formData.handle,
+          comment: ''
+        };
+        
+        await sendToNotion(submissionData);
         setIsSubmitted(true);
       } catch (err) {
         setError('ERROR: Failed to submit form');

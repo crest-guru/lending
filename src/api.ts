@@ -1,12 +1,11 @@
 // Client helper to submit form to API (supports external base via VITE_API_BASE)
 export async function sendToNotion(formData: {
   email: string;
-  isTreasurer: boolean;
-  organization: string;
+  treasuary: string;
+  organisation: string;
   assets: string;
-  handle: string;
-  betaAgreed: boolean;
-  privacyAgreed: boolean;
+  tg: string;
+  comment: string;
 }) {
   const API_BASE = (import.meta as any).env?.VITE_API_BASE || '';
   const controller = new AbortController();
@@ -14,16 +13,12 @@ export async function sendToNotion(formData: {
 
   try {
     const payload = {
-      // Also send original keys for compatibility first
-      ...formData,
-      // Then override with API-expected keys to avoid duplicates
       email: formData.email,
-      checkbox: formData.privacyAgreed,
-      organisation: formData.organization,
-      treasure: formData.isTreasurer,
-      treasureText: formData.isTreasurer ? 'I manage a treasury / DAO / family office / fund' : '',
-      tg: formData.handle,
-      comment: '',
+      treasuary: formData.treasuary,
+      organisation: formData.organisation,
+      assets: formData.assets,
+      tg: formData.tg,
+      comment: formData.comment,
     };
 
     const response = await fetch(`${API_BASE}/api/submit-form`, {

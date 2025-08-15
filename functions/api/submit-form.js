@@ -30,25 +30,15 @@ export async function onRequest(context) {
       return json({ error: 'Invalid JSON body' }, 400, CORS);
     }
 
-    // Accept both old and new client field names
-    const emailRaw = (body.email ?? '').toString();
-    const email = emailRaw.trim();
-
-    const checkbox = Boolean(
-      body.checkbox ?? body.privacyAgreed ?? false
-    );
-    const organisation = (body.organisation ?? body.organization ?? '').toString();
-    const treasure = Boolean(
-      body.treasure ?? body.isTreasurer ?? false
-    );
-    const tg = (body.tg ?? body.handle ?? '').toString();
-    const commentInput = (body.comment ?? '').toString();
+    const email = (body.email ?? '').toString().trim();
+    const treasuary = (body.treasuary ?? '').toString();
+    const organisation = (body.organisation ?? '').toString();
     const assets = (body.assets ?? '').toString();
-    const treasureText = (body.treasureText ?? (treasure ? 'I manage a treasury / DAO / family office / fund' : '')).toString();
+    const tg = (body.tg ?? '').toString();
+    const comment = (body.comment ?? '').toString();
 
     if (!email) return json({ error: 'Email is required' }, 400, CORS);
 
-    const comment = commentInput || '';
     if (comment.length > 150) {
       return json({ error: 'Comment too long (max 150 characters)' }, 400, CORS);
     }
@@ -84,26 +74,24 @@ export async function onRequest(context) {
         'Content-Type': 'application/json',
         'Notion-Version': '2022-06-28',
       },
-      body: JSON.stringify({
-        parent: { database_id: NOTION_DB },
-        properties: {
-          Email: { title: [{ text: { content: email } }] },
-          Organisation: { rich_text: [{ text: { content: organisation || '' } }] },
-          // treasure captured as text from form selection/label
-          treasure: { rich_text: [{ text: { content: treasureText } }] },
-          // assets captured as selected text from form (e.g., "<$100K")
-          assets: { rich_text: [{ text: { content: assets || '' } }] },
-          tg: { rich_text: [{ text: { content: tg || '' } }] },
-          Comment: { rich_text: [{ text: { content: comment } }] },
-          Timestamp: { date: { start: timestamp } },
-          IP: { rich_text: [{ text: { content: ip } }] },
-          userAgent: { rich_text: [{ text: { content: userAgent } }] },
-          country: { rich_text: [{ text: { content: country } }] },
-          referer: { rich_text: [{ text: { content: referer } }] },
-          timezone: { rich_text: [{ text: { content: timezone } }] },
-          language: { rich_text: [{ text: { content: language } }] },
-        },
-      }),
+             body: JSON.stringify({
+         parent: { database_id: NOTION_DB },
+         properties: {
+           Email: { title: [{ text: { content: email } }] },
+           treasuary: { rich_text: [{ text: { content: treasuary } }] },
+           organisation: { rich_text: [{ text: { content: organisation } }] },
+           assets: { rich_text: [{ text: { content: assets } }] },
+           tg: { rich_text: [{ text: { content: tg } }] },
+           comment: { rich_text: [{ text: { content: comment } }] },
+           timestamp: { date: { start: timestamp } },
+           IP: { rich_text: [{ text: { content: ip } }] },
+           userAgent: { rich_text: [{ text: { content: userAgent } }] },
+           country: { rich_text: [{ text: { content: country } }] },
+           referer: { rich_text: [{ text: { content: referer } }] },
+           timezone: { rich_text: [{ text: { content: timezone } }] },
+           language: { rich_text: [{ text: { content: language } }] },
+         },
+       }),
       signal: controller.signal,
     }).finally(() => clearTimeout(timeoutId));
 
