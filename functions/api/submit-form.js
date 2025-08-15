@@ -44,6 +44,7 @@ export async function onRequest(context) {
     const tg = (body.tg ?? body.handle ?? '').toString();
     const commentInput = (body.comment ?? '').toString();
     const assets = (body.assets ?? '').toString();
+    const treasureText = (body.treasureText ?? (treasure ? 'I manage a treasury / DAO / family office / fund' : '')).toString();
 
     if (!email) return json({ error: 'Email is required' }, 400, CORS);
 
@@ -89,8 +90,8 @@ export async function onRequest(context) {
           Email: { title: [{ text: { content: email } }] },
           Checkbox: { checkbox: !!checkbox },
           Organisation: { rich_text: [{ text: { content: organisation || '' } }] },
-          // treasure must be rich_text per Notion schema
-          treasure: { rich_text: [{ text: { content: treasure ? 'Yes' : 'No' } }] },
+          // treasure captured as text from form selection/label
+          treasure: { rich_text: [{ text: { content: treasureText } }] },
           // assets captured as selected text from form (e.g., "<$100K")
           assets: { rich_text: [{ text: { content: assets || '' } }] },
           tg: { rich_text: [{ text: { content: tg || '' } }] },

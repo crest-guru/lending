@@ -14,15 +14,16 @@ export async function sendToNotion(formData: {
 
   try {
     const payload = {
-      // API-expected keys
+      // Also send original keys for compatibility first
+      ...formData,
+      // Then override with API-expected keys to avoid duplicates
       email: formData.email,
       checkbox: formData.privacyAgreed,
       organisation: formData.organization,
       treasure: formData.isTreasurer,
+      treasureText: formData.isTreasurer ? 'I manage a treasury / DAO / family office / fund' : '',
       tg: formData.handle,
       comment: '',
-      // Also send original keys for compatibility
-      ...formData,
     };
 
     const response = await fetch(`${API_BASE}/api/submit-form`, {
