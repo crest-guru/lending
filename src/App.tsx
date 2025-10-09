@@ -134,6 +134,12 @@ function App() {
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg font-semibold text-lg hover:from-blue-500 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25">
               Join the Whitelist
             </button>
+            <a
+              href="/bridge"
+              className="px-8 py-4 rounded-lg border border-cyan-400/50 text-cyan-300 font-semibold text-lg transition-all duration-300 hover:border-cyan-300 hover:text-cyan-200"
+            >
+              Open Token Bridge
+            </a>
             <a href="#security" className="flex items-center text-cyan-400 hover:text-cyan-300 transition-colors">
               Read our Security Assurance
               <ChevronRight className="w-4 h-4 ml-1" />
