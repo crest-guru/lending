@@ -1,5 +1,6 @@
 # Repository Guidelines
 
+
 ## Project Structure & Module Organization
 Source React + TypeScript code lives in `src/`, with `App.tsx` driving the landing page, `BridgePage.tsx` serving the `/bridge` experience, and `api.ts` handling client calls to the Notion bridge. ABIs for on-chain interactions live under `src/abis/`. Cloudflare Pages functions sit in `functions/api`; `submit-form.js` receives form data, enriches it with request metadata, and forwards submissions to Notion. Static assets belong in `public/` (served verbatim by Vite), while production bundles are emitted to `dist/` after a build. Keep long-lived configuration in the root configs (Vite, Tailwind, ESLint) so new agents inherit shared behavior.
 
